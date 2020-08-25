@@ -4,6 +4,10 @@ require "minitest/autorun"
 require "minitest/pride"
 
 class Minitest::Test
+  def setup
+    @@once ||= TorchAudio::Datasets::YESNO.new(root, download: true)
+  end
+
   def root
     @root ||= ENV["CI"] ? "#{ENV["HOME"]}/data" : Dir.tmpdir
   end
