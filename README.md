@@ -2,6 +2,8 @@
 
 :fire: An audio library for Torch.rb
 
+[![Build Status](https://travis-ci.org/ankane/torchaudio.svg?branch=master)](https://travis-ci.org/ankane/torchaudio)
+
 ## Installation
 
 First, [install SoX](#sox-installation). For Homebrew, use:
