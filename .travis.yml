@@ -1,11 +1,18 @@
 dist: bionic
 language: ruby
 rvm: 2.7
+addons:
+  apt:
+    packages:
+      - sox
+      - libsox-dev
+      - libsox-fmt-all
 before_install:
   - export LIBTORCH_VERSION=1.6.0
   - ./test/ci/install_libtorch.sh
   - bundle config build.torch-rb --with-torch-dir=$HOME/libtorch/$LIBTORCH_VERSION
 cache:
+  apt: true
   bundler: true
   directories:
     - $HOME/libtorch
