@@ -17,6 +17,9 @@ class TorchAudioTest < Minitest::Test
   end
 
   def test_load_wav
-    assert TorchAudio.load_wav(audio_path)
+    out, sample_rate = TorchAudio.load_wav(audio_path)
+    assert_equal [1, 50800], out.shape
+    assert_equal [1, 2, 1, 1, 1], out[0][0..4].to_a
+    assert_equal 8000, sample_rate
   end
 end
