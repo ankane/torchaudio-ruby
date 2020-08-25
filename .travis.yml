@@ -17,7 +17,7 @@ cache:
   directories:
     - $HOME/libtorch
     - $HOME/data
-before_script: bundle exec rake compile
+before_script: bundle exec rake compile -- --with-torch-dir=$HOME/libtorch/$LIBTORCH_VERSION
 script: bundle exec rake test
 notifications:
   email:
