@@ -88,6 +88,39 @@ module TorchAudio
 
         fb
       end
+
+      def compute_deltas(specgram, win_length: 5, mode: "replicate")
+        device = specgram.device
+        dtype = specgram.dtype
+
+        # pack batch
+        shape = specgram.size
+        specgram = specgram.reshape(1, -1, shape[-1])
+
+        raise ArgumentError, "win_length must be >= 3" unless win_length >= 3
+
+        n = (win_length - 1).div(2)
+
+        # twice sum of integer squared
+        denom = n * (n + 1) * (2 * n + 1) / 3
+
+        specgram = Torch::NN::Functional.pad(specgram, [n, n], mode: mode)
+
+        kernel = Torch.arange(-n, n + 1, 1, device: device, dtype: dtype).repeat([specgram.shape[1], 1, 1])
+
+        output = Torch::NN::Functional.conv1d(specgram, kernel, groups: specgram.shape[1]) / denom
+
+        # unpack batch
+        output = output.reshape(shape)
+      end
+
+      def gain(waveform, gain_db: 1.0)
+        return waveform if gain_db == 0
+
+        ratio = 10 ** (gain_db / 20)
+
+        waveform * ratio
+      end
     end
   end
 
