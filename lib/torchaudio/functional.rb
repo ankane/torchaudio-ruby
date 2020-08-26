@@ -133,6 +133,87 @@ module TorchAudio
         end
       end
 
+      def biquad(waveform, b0, b1, b2, a0, a1, a2)
+        device = waveform.device
+        dtype = waveform.dtype
+
+        output_waveform = lfilter(
+            waveform,
+            Torch.tensor([a0, a1, a2], dtype: dtype, device: device),
+            Torch.tensor([b0, b1, b2], dtype: dtype, device: device)
+        )
+        output_waveform
+      end
+
+      def lowpass_biquad(waveform, sample_rate, cutoff_freq, q: 0.707)
+        w0 = 2 * Math::PI * cutoff_freq / sample_rate
+        alpha = Math.sin(w0) / 2 / q
+
+        b0 = (1 - Math.cos(w0)) / 2
+        b1 = 1 - Math.cos(w0)
+        b2 = b0
+        a0 = 1 + alpha
+        a1 = -2 * Math.cos(w0)
+        a2 = 1 - alpha
+        biquad(waveform, b0, b1, b2, a0, a1, a2)
+      end
+
+      def lfilter(waveform, a_coeffs, b_coeffs, clamp: true)
+        # pack batch
+        shape = waveform.size
+        waveform = waveform.reshape(-1, shape[-1])
+
+        raise ArgumentError unless (a_coeffs.size(0) == b_coeffs.size(0))
+        raise ArgumentError unless (waveform.size.length == 2)
+        raise ArgumentError unless (waveform.device == a_coeffs.device)
+        raise ArgumentError unless (b_coeffs.device == a_coeffs.device)
+
+        device = waveform.device
+        dtype = waveform.dtype
+        n_channel, n_sample = waveform.size
+        n_order = a_coeffs.size(0)
+        n_sample_padded = n_sample + n_order - 1
+        raise ArgumentError unless (n_order > 0)
+
+        # Pad the input and create output
+        padded_waveform = Torch.zeros(n_channel, n_sample_padded, dtype: dtype, device: device)
+        padded_waveform[0..-1, (n_order - 1)..-1] = waveform
+        padded_output_waveform = Torch.zeros(n_channel, n_sample_padded, dtype: dtype, device: device)
+
+        # Set up the coefficients matrix
+        # Flip coefficients' order
+        a_coeffs_flipped = a_coeffs.flip([0])
+        b_coeffs_flipped = b_coeffs.flip([0])
+
+        # calculate windowed_input_signal in parallel
+        # create indices of original with shape (n_channel, n_order, n_sample)
+        window_idxs = Torch.arange(n_sample, device: device).unsqueeze(0) + Torch.arange(n_order, device: device).unsqueeze(1)
+        window_idxs = window_idxs.repeat([n_channel, 1, 1])
+        window_idxs += (Torch.arange(n_channel, device: device).unsqueeze(-1).unsqueeze(-1) * n_sample_padded)
+        window_idxs = window_idxs.long
+        # (n_order, ) matmul (n_channel, n_order, n_sample) -> (n_channel, n_sample)
+        input_signal_windows = Torch.matmul(b_coeffs_flipped, Torch.take(padded_waveform, window_idxs))
+
+        input_signal_windows.div!(a_coeffs[0])
+        a_coeffs_flipped.div!(a_coeffs[0])
+        input_signal_windows.t.each_with_index do |o0, i_sample|
+          windowed_output_signal = padded_output_waveform[0..-1, i_sample...(i_sample + n_order)]
+          o0.addmv!(windowed_output_signal, a_coeffs_flipped, alpha: -1)
+          padded_output_waveform[0..-1, i_sample + n_order - 1] = o0
+        end
+
+        output = padded_output_waveform[0..-1, (n_order - 1)..-1]
+
+        if clamp
+          output = Torch.clamp(output, -1.0, 1.0)
+        end
+
+        # unpack batch
+        output = output.reshape(shape[0...-1] + output.shape[-1..-1])
+
+        output
+      end
+
       private
 
       def _apply_probability_distribution(waveform, density_function: "TPDF")
@@ -164,7 +245,7 @@ module TorchAudio
           num_rand_variables = 6
 
           gaussian = waveform[random_channel][random_time]
-          for ws in num_rand_variables * [time_size]
+          (num_rand_variables * [time_size]).each do |ws|
             rand_chan = Torch.randint(channel_size, [1]).item.to_i
             gaussian += waveform[rand_chan][Torch.randint(ws, [1]).item.to_i]
           end

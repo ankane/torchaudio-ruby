@@ -56,4 +56,14 @@ class TransformsTest < Minitest::Test
     expected = [3.0517578e-05, 6.1035156e-05, 3.0517578e-05, 3.0517578e-05, 3.0517578e-05]
     assert_elements_in_delta expected, transformed[0, 0..4].to_a
   end
+
+  def test_lowpass_biquad
+    skip "Needs Torch.clamp from Torch.rb"
+
+    waveform, sample_rate = TorchAudio.load(audio_path)
+    transformed = TorchAudio::Functional.lowpass_biquad(waveform, sample_rate, 3000)
+    assert_equal [1, 50800], transformed.shape
+    expected = [1.7364715e-05, 5.308807e-05, 4.8351816e-05, 2.3546876e-05, 3.114574e-05]
+    assert_elements_in_delta expected, transformed[0, 0..4].to_a
+  end
 end
