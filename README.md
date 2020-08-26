@@ -22,6 +22,25 @@ gem 'torchaudio'
 
 This library follows the [Python API](https://pytorch.org/audio/). Many methods and options are missing at the moment. PRs welcome!
 
+## Example
+
+Load a file
+
+```ruby
+waveform, sample_rate = TorchAudio.load(filename)
+```
+
+## Transforms [master]
+
+```ruby
+TorchAudio::Transforms::Spectrogram.new.call(waveform)
+```
+
+Supported transforms are:
+
+- MelSpectrogram
+- Spectrogram
+
 ## Datasets
 
 Load a dataset

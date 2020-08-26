@@ -14,6 +14,10 @@ require "set"
 # modules
 require "torchaudio/datasets/utils"
 require "torchaudio/datasets/yesno"
+require "torchaudio/functional"
+require "torchaudio/transforms/mel_scale"
+require "torchaudio/transforms/mel_spectrogram"
+require "torchaudio/transforms/spectrogram"
 require "torchaudio/version"
 
 module TorchAudio
