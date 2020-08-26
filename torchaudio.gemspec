@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 2.5"
 
-  spec.add_dependency "torch-rb", ">= 0.3.3"
+  spec.add_dependency "torch-rb", ">= 0.3.4"
   spec.add_dependency "rice", ">= 2.2"
 
   spec.add_development_dependency "bundler"
