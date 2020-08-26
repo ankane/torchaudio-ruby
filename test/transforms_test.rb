@@ -48,4 +48,12 @@ class TransformsTest < Minitest::Test
     expected = [3.4241286e-05, 6.848257e-05, 3.4241286e-05, 3.4241286e-05, 3.4241286e-05]
     assert_elements_in_delta expected, transformed[0, 0..4].to_a
   end
+
+  def test_dither
+    waveform, sample_rate = TorchAudio.load(audio_path)
+    transformed = TorchAudio::Functional.dither(waveform)
+    assert_equal [1, 50800], transformed.shape
+    expected = [3.0517578e-05, 6.1035156e-05, 3.0517578e-05, 3.0517578e-05, 3.0517578e-05]
+    assert_elements_in_delta expected, transformed[0, 0..4].to_a
+  end
 end

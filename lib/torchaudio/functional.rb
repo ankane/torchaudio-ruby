@@ -121,6 +121,69 @@ module TorchAudio
 
         waveform * ratio
       end
+
+      def dither(waveform, density_function: "TPDF", noise_shaping: false)
+        dithered = _apply_probability_distribution(waveform, density_function: density_function)
+
+        if noise_shaping
+          raise "Not implemented yet"
+          # _add_noise_shaping(dithered, waveform)
+        else
+          dithered
+        end
+      end
+
+      private
+
+      def _apply_probability_distribution(waveform, density_function: "TPDF")
+        # pack batch
+        shape = waveform.size
+        waveform = waveform.reshape(-1, shape[-1])
+
+        channel_size = waveform.size[0] - 1
+        time_size = waveform.size[-1] - 1
+
+        random_channel = channel_size > 0 ? Torch.randint(channel_size, [1]).item.to_i : 0
+        random_time = time_size > 0 ? Torch.randint(time_size, [1]).item.to_i : 0
+
+        number_of_bits = 16
+        up_scaling = 2 ** (number_of_bits - 1) - 2
+        signal_scaled = waveform * up_scaling
+        down_scaling = 2 ** (number_of_bits - 1)
+
+        signal_scaled_dis = waveform
+        if density_function == "RPDF"
+          rpdf = waveform[random_channel][random_time] - 0.5
+
+          signal_scaled_dis = signal_scaled + rpdf
+        elsif density_function == "GPDF"
+          # TODO Replace by distribution code once
+          # https://github.com/pytorch/pytorch/issues/29843 is resolved
+          # gaussian = torch.distributions.normal.Normal(torch.mean(waveform, -1), 1).sample()
+
+          num_rand_variables = 6
+
+          gaussian = waveform[random_channel][random_time]
+          for ws in num_rand_variables * [time_size]
+            rand_chan = Torch.randint(channel_size, [1]).item.to_i
+            gaussian += waveform[rand_chan][Torch.randint(ws, [1]).item.to_i]
+          end
+
+          signal_scaled_dis = signal_scaled + gaussian
+        else
+          # dtype needed for https://github.com/pytorch/pytorch/issues/32358
+          # TODO add support for dtype and device to bartlett_window
+          tpdf = Torch.bartlett_window(time_size + 1).to(signal_scaled.device, dtype: signal_scaled.dtype)
+          tpdf = tpdf.repeat([channel_size + 1, 1])
+          signal_scaled_dis = signal_scaled + tpdf
+        end
+
+        quantised_signal_scaled = Torch.round(signal_scaled_dis)
+        quantised_signal = quantised_signal_scaled / down_scaling
+
+        # unpack batch
+        quantised_signal.reshape(shape[0...-1] + quantised_signal.shape[-1..-1])
+      end
     end
   end
 
