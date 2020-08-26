@@ -66,4 +66,8 @@ class TransformsTest < Minitest::Test
     expected = [1.7364715e-05, 5.308807e-05, 4.8351816e-05, 2.3546876e-05, 3.114574e-05]
     assert_elements_in_delta expected, transformed[0, 0..4].to_a
   end
+
+  def test_highpass_biquad
+    skip "Needs Torch.clamp from Torch.rb"
+  end
 end

@@ -145,6 +145,19 @@ module TorchAudio
         output_waveform
       end
 
+      def highpass_biquad(waveform, sample_rate, cutoff_freq, q: 0.707)
+        w0 = 2 * Math::PI * cutoff_freq / sample_rate
+        alpha = Math.sin(w0) / 2.0 / q
+
+        b0 = (1 + Math.cos(w0)) / 2
+        b1 = -1 - Math.cos(w0)
+        b2 = b0
+        a0 = 1 + alpha
+        a1 = -2 * Math.cos(w0)
+        a2 = 1 - alpha
+        biquad(waveform, b0, b1, b2, a0, a1, a2)
+      end
+
       def lowpass_biquad(waveform, sample_rate, cutoff_freq, q: 0.707)
         w0 = 2 * Math::PI * cutoff_freq / sample_rate
         alpha = Math.sin(w0) / 2 / q
