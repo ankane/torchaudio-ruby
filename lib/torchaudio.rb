@@ -17,6 +17,8 @@ require "torchaudio/datasets/yesno"
 require "torchaudio/functional"
 require "torchaudio/transforms/mel_scale"
 require "torchaudio/transforms/mel_spectrogram"
+require "torchaudio/transforms/mu_law_encoding"
+require "torchaudio/transforms/mu_law_decoding"
 require "torchaudio/transforms/spectrogram"
 require "torchaudio/version"
 

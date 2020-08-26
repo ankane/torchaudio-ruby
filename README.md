@@ -39,6 +39,8 @@ TorchAudio::Transforms::Spectrogram.new.call(waveform)
 Supported transforms are:
 
 - MelSpectrogram
+- MuLawDecoding
+- MuLawEncoding
 - Spectrogram
 
 ## Datasets

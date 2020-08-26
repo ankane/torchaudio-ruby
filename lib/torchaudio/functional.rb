@@ -29,6 +29,28 @@ module TorchAudio
         spec_f
       end
 
+      def mu_law_encoding(x, quantization_channels)
+        mu = quantization_channels - 1.0
+        if !x.floating_point?
+          x = x.to(dtype: :float)
+        end
+        mu = Torch.tensor(mu, dtype: x.dtype)
+        x_mu = Torch.sign(x) * Torch.log1p(mu * Torch.abs(x)) / Torch.log1p(mu)
+        x_mu = ((x_mu + 1) / 2 * mu + 0.5).to(dtype: :int64)
+        x_mu
+      end
+
+      def mu_law_decoding(x_mu, quantization_channels)
+        mu = quantization_channels - 1.0
+        if !x_mu.floating_point?
+          x_mu = x_mu.to(dtype: :float)
+        end
+        mu = Torch.tensor(mu, dtype: x_mu.dtype)
+        x = ((x_mu) / mu) * 2 - 1.0
+        x = Torch.sign(x) * (Torch.exp(Torch.abs(x) * Torch.log1p(mu)) - 1.0) / mu
+        x
+      end
+
       def complex_norm(complex_tensor, power: 1.0)
         complex_tensor.pow(2.0).sum(-1).pow(0.5 * power)
       end
