@@ -56,6 +56,23 @@ Supported transforms are:
 - MuLawEncoding
 - Spectrogram
 
+## Functional
+
+```ruby
+TorchAudio::Functional.lowpass_biquad(waveform, sample_rate, cutoff_freq)
+```
+
+Supported functions are:
+
+- compute_deltas
+- dither
+- gain
+- highpass_biquad
+- lowpass_biquad
+- mu_law_decoding
+- mu_law_encoding
+- spectrogram
+
 ## Datasets
 
 Load a dataset
