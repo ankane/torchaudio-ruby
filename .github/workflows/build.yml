@@ -29,5 +29,6 @@ jobs:
       with:
         path: ~/data
         key: data-v1
+    - run: mkdir -p ~/data
     - run: bundle exec rake compile -- --with-torch-dir=$HOME/libtorch
     - run: bundle exec rake test
