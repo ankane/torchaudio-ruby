@@ -1,7 +1,7 @@
 module TorchAudio
   module Transforms
     class AmplitudeToDB < Torch::NN::Module
-      def initialize stype: :power, top_db: nil
+      def initialize(stype: :power, top_db: nil)
         super()
         
         @stype = stype
@@ -15,7 +15,7 @@ module TorchAudio
         @db_multiplier = Math.log10([@amin, @ref_value].max)
       end
 
-      def forward amplitude_spectrogram
+      def forward(amplitude_spectrogram)
         F.amplitude_to_DB(
           amplitude_spectrogram, 
           @multiplier, @amin, @db_multiplier, @top_db
