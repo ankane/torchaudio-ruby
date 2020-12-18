@@ -18,7 +18,8 @@ module TorchAudio
       def forward(amplitude_spectrogram)
         F.amplitude_to_DB(
           amplitude_spectrogram, 
-          @multiplier, @amin, @db_multiplier, @top_db
+          @multiplier, @amin, @db_multiplier, 
+          top_db: @top_db
         )
       end
     end

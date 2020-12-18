@@ -227,7 +227,7 @@ module TorchAudio
         output
       end
 
-      def amplitude_to_DB(amp, multiplier, amin, db_multiplier, top_db = nil)
+      def amplitude_to_DB(amp, multiplier, amin, db_multiplier, top_db: nil)
         db = Torch.log10(Torch.clamp(amp, min: amin)) * multiplier
         db -= multiplier * db_multiplier
 
