@@ -16,7 +16,7 @@ class TransformsTest < Minitest::Test
     expected = [4.320904736232478e-06, 0.00026097119553014636, 0.00010256850509904325, 0.0009344223653897643, 0.00013253440556582063]
     assert_elements_in_delta expected, transformed[0][0][0..4].to_a
   end
-  
+
   def test_amplitude_to_db
     waveform, sample_rate = TorchAudio.load(audio_path)
     transformed = TorchAudio::Transforms::MelSpectrogram.new(sample_rate: sample_rate).call(waveform)
