@@ -227,6 +227,19 @@ module TorchAudio
         output
       end
 
+      def amplitude_to_DB(amp, multiplier, amin, db_multiplier, top_db: nil)
+        db = Torch.log10(Torch.clamp(amp, min: amin)) * multiplier
+        db -= multiplier * db_multiplier
+
+        db = db.clamp(min: db.max.item - top_db) if top_db
+
+        db
+      end
+
+      def DB_to_amplitude(db, ref, power)
+        Torch.pow(Torch.pow(10.0, db * 0.1), power) * ref
+      end
+
       private
 
       def _apply_probability_distribution(waveform, density_function: "TPDF")
