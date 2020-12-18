@@ -6,7 +6,7 @@ module TorchAudio
         
         @stype = stype
         
-        raise ArgumentError, 'top_db must be a positive numerical' if top_db and !(0.0..).include?(top_db)
+        raise ArgumentError, 'top_db must be a positive numerical' if top_db and top_db.negative?
         
         @top_db = top_db
         @multiplier = stype == :power ? 10.0 : 20.0
