@@ -1,4 +1,4 @@
-## 0.1.2 (unreleased)
+## 0.1.2 (2021-02-06)
 
 - Added `amplitude_to_DB` and `DB_to_amplitude` methods
 - Added `AmplitudeToDB` transform
