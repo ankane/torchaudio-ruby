@@ -64,12 +64,12 @@ void Init_ext()
 
   Class rb_cSignalInfo = define_class_under<sox_signalinfo_t>(rb_mExt, "SignalInfo")
     .define_constructor(Constructor<sox_signalinfo_t>())
-    .define_method("rate", *[](sox_signalinfo_t self) { return self.rate; })
-    .define_method("channels", *[](sox_signalinfo_t self) { return self.channels; })
-    .define_method("precision", *[](sox_signalinfo_t self) { return self.precision; })
-    .define_method("length", *[](sox_signalinfo_t self) { return self.length; })
-    .define_method("rate=", *[](sox_signalinfo_t self, sox_rate_t rate) { self.rate = rate; })
-    .define_method("channels=", *[](sox_signalinfo_t self, unsigned channels) { self.channels = channels; })
-    .define_method("precision=", *[](sox_signalinfo_t self, unsigned precision) { self.precision = precision; })
-    .define_method("length=", *[](sox_signalinfo_t self, sox_uint64_t length) { self.length = length; });
+    .define_method("rate", *[](sox_signalinfo_t& self) { return self.rate; })
+    .define_method("channels", *[](sox_signalinfo_t& self) { return self.channels; })
+    .define_method("precision", *[](sox_signalinfo_t& self) { return self.precision; })
+    .define_method("length", *[](sox_signalinfo_t& self) { return self.length; })
+    .define_method("rate=", *[](sox_signalinfo_t& self, sox_rate_t rate) { self.rate = rate; })
+    .define_method("channels=", *[](sox_signalinfo_t& self, unsigned channels) { self.channels = channels; })
+    .define_method("precision=", *[](sox_signalinfo_t& self, unsigned precision) { self.precision = precision; })
+    .define_method("length=", *[](sox_signalinfo_t& self, sox_uint64_t length) { self.length = length; });
 }

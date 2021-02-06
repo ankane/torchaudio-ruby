@@ -2,6 +2,7 @@
 
 - Added `amplitude_to_DB` and `DB_to_amplitude` methods
 - Added `AmplitudeToDB` transform
+- Fixed `save` options
 
 ## 0.1.1 (2020-08-26)
 

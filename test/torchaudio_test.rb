@@ -22,4 +22,11 @@ class TorchAudioTest < Minitest::Test
     assert_equal [1, 2, 1, 1, 1], out[0][0..4].to_a
     assert_equal 8000, sample_rate
   end
+
+  def test_save_sample_rate
+    save_path = "#{Dir.mktmpdir}/save.wav"
+    TorchAudio.save(save_path, Torch.zeros([1, 16000]), 16000)
+    _, sample_rate = TorchAudio.load(save_path)
+    assert_equal 16000, sample_rate
+  end
 end
