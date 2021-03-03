@@ -1,7 +1,6 @@
 #include <torchaudio/csrc/sox.h>
 
-#include <rice/Constructor.hpp>
-#include <rice/Module.hpp>
+#include <rice/rice.hpp>
 
 using namespace Rice;
 
