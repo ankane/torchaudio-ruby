@@ -7,9 +7,9 @@ using namespace Rice;
 class SignalInfo {
   sox_signalinfo_t* value = nullptr;
   public:
-    SignalInfo(Object o) {
-      if (!o.is_nil()) {
-        value = from_ruby<sox_signalinfo_t*>(o);
+    SignalInfo(VALUE o) {
+      if (!NIL_P(o)) {
+        value = Rice::detail::From_Ruby<sox_signalinfo_t*>::convert(o);
       }
     }
     operator sox_signalinfo_t*() {
@@ -17,19 +17,24 @@ class SignalInfo {
     }
 };
 
-template<>
-inline
-SignalInfo from_ruby<SignalInfo>(Object x)
+namespace Rice::detail
 {
-  return SignalInfo(x);
+  template<>
+  struct From_Ruby<SignalInfo>
+  {
+    static SignalInfo convert(VALUE x)
+    {
+      return SignalInfo(x);
+    }
+  };
 }
 
 class EncodingInfo {
   sox_encodinginfo_t* value = nullptr;
   public:
-    EncodingInfo(Object o) {
-      if (!o.is_nil()) {
-        value = from_ruby<sox_encodinginfo_t*>(o);
+    EncodingInfo(VALUE o) {
+      if (!NIL_P(o)) {
+        value = Rice::detail::From_Ruby<sox_encodinginfo_t*>::convert(o);
       }
     }
     operator sox_encodinginfo_t*() {
@@ -37,11 +42,16 @@ class EncodingInfo {
     }
 };
 
-template<>
-inline
-EncodingInfo from_ruby<EncodingInfo>(Object x)
+namespace Rice::detail
 {
-  return EncodingInfo(x);
+  template<>
+  struct From_Ruby<EncodingInfo>
+  {
+    static EncodingInfo convert(VALUE x)
+    {
+      return EncodingInfo(x);
+    }
+  };
 }
 
 extern "C"
@@ -50,12 +60,12 @@ void Init_ext()
   Module rb_mTorchAudio = define_module("TorchAudio");
 
   Module rb_mExt = define_module_under(rb_mTorchAudio, "Ext")
-    .define_singleton_method(
+    .define_singleton_function(
       "read_audio_file",
       *[](const std::string& file_name, at::Tensor output, bool ch_first, int64_t nframes, int64_t offset, SignalInfo si, EncodingInfo ei, const char* ft) {
         return torch::audio::read_audio_file(file_name, output, ch_first, nframes, offset, si, ei, ft);
       })
-    .define_singleton_method(
+    .define_singleton_function(
       "write_audio_file",
       *[](const std::string& file_name, const at::Tensor& tensor, SignalInfo si, EncodingInfo ei, const char* file_type) {
         return torch::audio::write_audio_file(file_name, tensor, si, ei, file_type);
