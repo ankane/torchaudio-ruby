@@ -1,8 +1,6 @@
 require "mkmf-rice"
 
-abort "Missing stdc++" unless have_library("stdc++")
-
-$CXXFLAGS += " -std=c++14"
+$CXXFLAGS += " -std=c++17"
 
 abort "SoX not found" unless have_library("sox")
 

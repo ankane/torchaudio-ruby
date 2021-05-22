@@ -1,3 +1,8 @@
+## 0.2.0 (unreleased)
+
+- Updated to Rice 4
+- Dropped support for Ruby < 2.6
+
 ## 0.1.2 (2021-02-06)
 
 - Added `amplitude_to_DB` and `DB_to_amplitude` methods
