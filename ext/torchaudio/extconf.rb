@@ -1,6 +1,6 @@
 require "mkmf-rice"
 
-$CXXFLAGS += " -std=c++17"
+$CXXFLAGS += " -std=c++17 $(optflags)"
 
 abort "SoX not found" unless have_library("sox")
 
