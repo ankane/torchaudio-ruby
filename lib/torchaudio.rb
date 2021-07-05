@@ -21,6 +21,7 @@ require "torchaudio/transforms/mu_law_encoding"
 require "torchaudio/transforms/mu_law_decoding"
 require "torchaudio/transforms/spectrogram"
 require "torchaudio/transforms/amplitude_to_db"
+require "torchaudio/transforms/mfcc"
 require "torchaudio/version"
 
 module TorchAudio

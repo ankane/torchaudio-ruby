@@ -240,6 +240,23 @@ module TorchAudio
         Torch.pow(Torch.pow(10.0, db * 0.1), power) * ref
       end
 
+      def create_dct(n_mfcc, n_mels, norm: nil)
+        n = Torch.arange(n_mels.to_f)
+        k = Torch.arange(n_mfcc.to_f).unsqueeze!(1)
+        dct = Torch.cos((n + 0.5) * k * Math::PI / n_mels.to_f)
+
+        if norm.nil?
+          dct *= 2.0
+        else
+          raise ArgumentError, "Invalid DCT norm value" unless norm == :ortho
+
+          dct[0] *= 1.0 / Math.sqrt(2.0)
+          dct *= Math.sqrt(2.0 / n_mels)
+        end
+
+        dct.t
+      end
+
       private
 
       def _apply_probability_distribution(waveform, density_function: "TPDF")
