@@ -8,19 +8,14 @@ Gem::Specification.new do |spec|
   spec.license       = "BSD-2-Clause"
 
   spec.author        = "Andrew Kane"
-  spec.email         = "andrew@chartkick.com"
+  spec.email         = "andrew@ankane.org"
 
   spec.files         = Dir["*.{md,txt}", "{ext,lib}/**/*"]
   spec.require_path  = "lib"
   spec.extensions    = ["ext/torchaudio/extconf.rb"]
 
-  spec.required_ruby_version = ">= 2.5"
+  spec.required_ruby_version = ">= 2.6"
 
-  spec.add_dependency "torch-rb", ">= 0.3.4"
-  spec.add_dependency "rice", ">= 2.2"
-
-  spec.add_development_dependency "bundler"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "rake-compiler"
-  spec.add_development_dependency "minitest", ">= 5"
+  spec.add_dependency "torch-rb", ">= 0.7.0"
+  spec.add_dependency "rice", ">= 4.0.2"
 end

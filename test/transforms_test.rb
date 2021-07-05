@@ -26,6 +26,15 @@ class TransformsTest < Minitest::Test
     assert_elements_in_delta expected, db[0][0][0..4].to_a
   end
 
+  def test_amplitude_to_db
+    waveform, sample_rate = TorchAudio.load(audio_path)
+    transformed = TorchAudio::Transforms::MelSpectrogram.new(sample_rate: sample_rate).call(waveform)
+    assert_equal [1, 128, 255], transformed.size
+    db = TorchAudio::Transforms::AmplitudeToDB.new(top_db: 80.0).call transformed
+    expected = [-53.64425277709961, -35.834075927734375, -39.889862060546875, -30.29456901550293, -38.77671432495117]
+    assert_elements_in_delta expected, db[0][0][0..4].to_a
+  end
+
   def test_mu_law_encoding
     waveform, sample_rate = TorchAudio.load(audio_path)
     transformed = TorchAudio::Transforms::MuLawEncoding.new.call(waveform)

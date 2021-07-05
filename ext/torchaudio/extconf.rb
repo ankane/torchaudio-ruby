@@ -1,8 +1,6 @@
 require "mkmf-rice"
 
-abort "Missing stdc++" unless have_library("stdc++")
-
-$CXXFLAGS += " -std=c++14"
+$CXXFLAGS += " -std=c++17 $(optflags)"
 
 abort "SoX not found" unless have_library("sox")
 
@@ -24,7 +22,6 @@ apple_clang = RbConfig::CONFIG["CC_VERSION_MESSAGE"] =~ /apple clang/i
 
 # check omp first
 if have_library("omp") || have_library("gomp")
-  $CXXFLAGS += " -DAT_PARALLEL_OPENMP=1"
   $CXXFLAGS += " -Xclang" if apple_clang
   $CXXFLAGS += " -fopenmp"
 end
