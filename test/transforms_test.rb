@@ -16,6 +16,15 @@ class TransformsTest < Minitest::Test
     expected = [4.320904736232478e-06, 0.00026097119553014636, 0.00010256850509904325, 0.0009344223653897643, 0.00013253440556582063]
     assert_elements_in_delta expected, transformed[0][0][0..4].to_a
   end
+  
+  def test_amplitude_to_db
+    waveform, sample_rate = TorchAudio.load(audio_path)
+    transformed = TorchAudio::Transforms::MelSpectrogram.new(sample_rate: sample_rate).call(waveform)
+    assert_equal [1, 128, 255], transformed.size
+    db = TorchAudio::Transforms::AmplitudeToDB.new(top_db: 80.0).call transformed
+    expected = [-53.64425277709961, -35.834075927734375, -39.889862060546875, -30.29456901550293, -38.77671432495117]
+    assert_elements_in_delta expected, db[0][0][0..4].to_a
+  end
 
   def test_amplitude_to_db
     waveform, sample_rate = TorchAudio.load(audio_path)
@@ -24,6 +33,14 @@ class TransformsTest < Minitest::Test
     db = TorchAudio::Transforms::AmplitudeToDB.new(top_db: 80.0).call transformed
     expected = [-53.64425277709961, -35.834075927734375, -39.889862060546875, -30.29456901550293, -38.77671432495117]
     assert_elements_in_delta expected, db[0][0][0..4].to_a
+  end
+
+  def test_mfcc
+    waveform, sample_rate = TorchAudio.load(audio_path)
+    transformed = TorchAudio::Transforms::MFCC.new(n_mfcc: 16, sample_rate: sample_rate).(waveform)
+    assert_equal [1, 16, 255], transformed.size
+    expected = [-588.85400390625, -470.5740051269531, -420.1156005859375, -393.4096374511719, -415.3000793457031]
+    assert_elements_in_delta expected, transformed[0][0][0..4].to_a
   end
 
   def test_mu_law_encoding
