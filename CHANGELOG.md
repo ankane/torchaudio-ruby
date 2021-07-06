@@ -1,3 +1,8 @@
+## 0.2.1 (unreleased)
+
+- Added `create_dct` method
+- Added `MFCC` transform
+
 ## 0.2.0 (2021-05-23)
 
 - Updated to Rice 4
