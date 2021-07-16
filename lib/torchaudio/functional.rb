@@ -12,9 +12,18 @@ module TorchAudio
         waveform = waveform.reshape(-1, shape[-1])
 
         # default values are consistent with librosa.core.spectrum._spectrogram
-        spec_f = Torch.stft(
-          waveform, n_fft, hop_length: hop_length, win_length: win_length, window: window, center: true, pad_mode: "reflect", normalized: false, onesided: true
-        )
+        spec_f =
+          Torch.stft(
+            waveform,
+            n_fft,
+            hop_length: hop_length,
+            win_length: win_length,
+            window: window,
+            center: true,
+            pad_mode: "reflect",
+            normalized: false,
+            onesided: true
+          )
 
         # unpack batch
         spec_f = spec_f.reshape(shape[0..-2] + spec_f.shape[-3..-1])
