@@ -1,7 +1,7 @@
 ## 0.2.1 (unreleased)
 
 - Added `create_dct` method
-- Added `MFCC` transform
+- Added `ComputeDeltas`, `Fade`, `MFCC`, and `Vol` transforms
 
 ## 0.2.0 (2021-05-23)
 

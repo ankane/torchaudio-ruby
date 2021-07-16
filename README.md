@@ -51,10 +51,16 @@ TorchAudio::Transforms::Spectrogram.new.call(waveform)
 
 Supported transforms are:
 
+- AmplitudeToDB
+- ComputeDeltas
+- Fade
+- MelScale
 - MelSpectrogram
+- MFCC
 - MuLawDecoding
 - MuLawEncoding
 - Spectrogram
+- Vol
 
 ## Functional
 
@@ -64,7 +70,11 @@ TorchAudio::Functional.lowpass_biquad(waveform, sample_rate, cutoff_freq)
 
 Supported functions are:
 
+- amplitude_to_DB
 - compute_deltas
+- create_dct
+- create_fb_matrix
+- DB_to_amplitude
 - dither
 - gain
 - highpass_biquad

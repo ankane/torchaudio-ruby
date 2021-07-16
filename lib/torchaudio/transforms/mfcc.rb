@@ -1,10 +1,7 @@
-require_relative 'amplitude_to_db'
-require_relative 'mel_spectrogram'
-
 module TorchAudio
   module Transforms
     class MFCC < Torch::NN::Module
-      
+
       SUPPORTED_DCT_TYPES = [2]
 
       def initialize(sample_rate: 16000, n_mfcc: 40, dct_type: 2, norm: :ortho, log_mels: false, melkwargs: {})
@@ -25,10 +22,10 @@ module TorchAudio
 
         dct_mat = F.create_dct(@n_mfcc, @melspectrogram.n_mels, norm: @norm)
         register_buffer('dct_mat', dct_mat)
-        
+
         @log_mels = log_mels
       end
-      
+
       def forward(waveform)
         mel_specgram = @melspectrogram.(waveform)
         if @log_mels
