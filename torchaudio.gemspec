@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name          = "torchaudio"
   spec.version       = TorchAudio::VERSION
   spec.summary       = "Data manipulation and transformation for audio signal processing"
-  spec.homepage      = "https://github.com/ankane/torchaudio"
+  spec.homepage      = "https://github.com/ankane/torchaudio-ruby"
   spec.license       = "BSD-2-Clause"
 
   spec.author        = "Andrew Kane"

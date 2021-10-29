@@ -1,8 +1,8 @@
-# TorchAudio
+# TorchAudio Ruby
 
 :fire: An audio library for Torch.rb
 
-[![Build Status](https://github.com/ankane/torchaudio/workflows/build/badge.svg?branch=master)](https://github.com/ankane/torchaudio/actions)
+[![Build Status](https://github.com/ankane/torchaudio-ruby/workflows/build/badge.svg?branch=master)](https://github.com/ankane/torchaudio-ruby/actions)
 
 ## Installation
 
@@ -134,22 +134,22 @@ addons:
 
 ## History
 
-View the [changelog](https://github.com/ankane/torchaudio/blob/master/CHANGELOG.md)
+View the [changelog](https://github.com/ankane/torchaudio-ruby/blob/master/CHANGELOG.md)
 
 ## Contributing
 
 Everyone is encouraged to help improve this project. Here are a few ways you can help:
 
-- [Report bugs](https://github.com/ankane/torchaudio/issues)
-- Fix bugs and [submit pull requests](https://github.com/ankane/torchaudio/pulls)
+- [Report bugs](https://github.com/ankane/torchaudio-ruby/issues)
+- Fix bugs and [submit pull requests](https://github.com/ankane/torchaudio-ruby/pulls)
 - Write, clarify, or fix documentation
 - Suggest or add new features
 
 To get started with development:
 
 ```sh
-git clone https://github.com/ankane/torchaudio.git
-cd torchaudio
+git clone https://github.com/ankane/torchaudio-ruby.git
+cd torchaudio-ruby
 bundle install
 bundle exec rake compile
 bundle exec rake test
