@@ -19,7 +19,7 @@ jobs:
         cd ~
         wget -q -O libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-$LIBTORCH_VERSION%2Bcpu.zip
         unzip -q libtorch.zip
-    - run: sudo apt-get install sox libsox-dev libsox-fmt-all
+    - run: sudo apt-get update && sudo apt-get install sox libsox-dev libsox-fmt-all
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 3.0
