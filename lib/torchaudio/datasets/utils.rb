@@ -15,7 +15,9 @@ module TorchAudio
         end
 
         # follows redirects
-        def download_url_to_file(url, dst, hash_value, hash_type)
+        def download_url_to_file(url, dst, hash_value, hash_type, redirects = 0)
+          raise "Too many redirects" if redirects > 10
+
           uri = URI(url)
           tmp = nil
           location = nil
@@ -41,7 +43,7 @@ module TorchAudio
           end
 
           if location
-            download_url_to_file(location, dst)
+            download_url_to_file(location, dst, hash_value, hash_type, redirects + 1)
           else
             # check hash
             # TODO use hash_type
