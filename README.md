@@ -15,7 +15,7 @@ brew install sox
 Add this line to your application’s Gemfile:
 
 ```ruby
-gem 'torchaudio'
+gem "torchaudio"
 ```
 
 ## Getting Started
