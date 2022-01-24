@@ -95,7 +95,7 @@ module TorchAudio
     end
 
     def save_encinfo(filepath, src, channels_first: true, signalinfo: nil, encodinginfo: nil, filetype: nil)
-      ch_idx, len_idx = channels_first ? [0, 1] : [1, 0]
+      ch_idx, _len_idx = channels_first ? [0, 1] : [1, 0]
 
       # check if save directory exists
       abs_dirpath = File.dirname(File.expand_path(filepath))
