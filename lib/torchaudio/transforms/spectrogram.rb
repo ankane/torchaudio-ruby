@@ -3,7 +3,8 @@ module TorchAudio
     class Spectrogram < Torch::NN::Module
       def initialize(
         n_fft: 400, win_length: nil, hop_length: nil, pad: 0,
-        window_fn: Torch.method(:hann_window), power: 2.0, normalized: false, wkwargs: nil
+        window_fn: Torch.method(:hann_window), power: 2.0, normalized: false, wkwargs: nil,
+        center: true, pad_mode: "reflect", onesided: true
       )
 
         super()
@@ -17,10 +18,16 @@ module TorchAudio
         @pad = pad
         @power = power
         @normalized = normalized
+        @center = center
+        @pad_mode = pad_mode
+        @onesided = onesided
       end
 
       def forward(waveform)
-        F.spectrogram(waveform, @pad, @window, @n_fft, @hop_length, @win_length, @power, @normalized)
+        F.spectrogram(
+          waveform, @pad, @window, @n_fft, @hop_length, @win_length, @power, @normalized,
+          center: @center, pad_mode: @pad_mode, onesided: @onesided
+        )
       end
     end
   end

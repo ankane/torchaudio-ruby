@@ -1,7 +1,7 @@
 module TorchAudio
   module Functional
     class << self
-      def spectrogram(waveform, pad, window, n_fft, hop_length, win_length, power, normalized)
+      def spectrogram(waveform, pad, window, n_fft, hop_length, win_length, power, normalized, center: true, pad_mode: "reflect", onesided: true)
         if pad > 0
           # TODO add "with torch.no_grad():" back when JIT supports it
           waveform = Torch::NN::Functional.pad(waveform, [pad, pad], "constant")
@@ -19,22 +19,25 @@ module TorchAudio
             hop_length: hop_length,
             win_length: win_length,
             window: window,
-            center: true,
-            pad_mode: "reflect",
+            center: center,
+            pad_mode: pad_mode,
             normalized: false,
-            onesided: true
+            onesided: onesided,
+            return_complex: true
           )
 
         # unpack batch
-        spec_f = spec_f.reshape(shape[0..-2] + spec_f.shape[-3..-1])
+        spec_f = spec_f.reshape(shape[0..-2] + spec_f.shape[-2..-1])
 
         if normalized
-          spec_f.div!(window.pow(2.0).sum.sqrt)
+          spec_f /= window.pow(2.0).sum.sqrt
         end
-        if power
-          spec_f = complex_norm(spec_f, power: power)
+        if !power.nil?
+          if power == 1
+            return spec_f.abs
+          end
+          return spec_f.abs.pow(power)
         end
-
         spec_f
       end
 
