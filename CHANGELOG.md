@@ -1,6 +1,7 @@
 ## 0.3.0 (unreleased)
 
 - Added `center`, `pad_mode`, and `onesided` options to `Spectogram` transform
+- Dropped support for Ruby < 2.7
 
 ## 0.2.1 (2021-07-16)
 
