@@ -31,9 +31,10 @@ module TorchAudio
   class Error < StandardError; end
 
   class << self
+    # TODO remove filetype in 0.4.0
     def load(
       filepath, out: nil, normalization: true, channels_first: true, num_frames: 0,
-      offset: 0, signalinfo: nil, encodinginfo: nil, filetype: nil
+      offset: 0, signalinfo: nil, encodinginfo: nil, filetype: nil, format: nil
     )
 
       filepath = filepath.to_s
@@ -59,7 +60,7 @@ module TorchAudio
 
       # same logic as C++
       # could also make read_audio_file work with nil
-      filetype ||= File.extname(filepath)[1..-1]
+      format ||= filetype || File.extname(filepath)[1..-1]
 
       sample_rate =
         Ext.read_audio_file(
@@ -70,7 +71,7 @@ module TorchAudio
           offset,
           signalinfo,
           encodinginfo,
-          filetype
+          format
         )
 
       # normalize if needed

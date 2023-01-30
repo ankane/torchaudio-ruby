@@ -1,3 +1,7 @@
+## 0.3.1 (unreleased)
+
+- Added `format` option
+
 ## 0.3.0 (2022-07-06)
 
 - Added `center`, `pad_mode`, and `onesided` options to `Spectogram` transform
