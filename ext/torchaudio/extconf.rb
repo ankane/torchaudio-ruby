@@ -2,8 +2,6 @@ require "mkmf-rice"
 
 $CXXFLAGS += " -std=c++17 $(optflags)"
 
-abort "SoX not found" unless have_library("sox")
-
 ext = File.expand_path(".", __dir__)
 csrc = File.expand_path("csrc", __dir__)
 
@@ -31,9 +29,19 @@ else
   $CXXFLAGS += " -Wno-duplicated-cond -Wno-suggest-attribute=noreturn"
 end
 
+paths = [
+  "/usr/local",
+  "/opt/homebrew",
+  "/home/linuxbrew/.linuxbrew"
+]
+
 inc, lib = dir_config("torch")
-inc ||= "/usr/local/include"
-lib ||= "/usr/local/lib"
+inc ||= paths.map { |v| "#{v}/include" }.find { |v| Dir.exist?("#{v}/torch") }
+lib ||= paths.map { |v| "#{v}/lib" }.find { |v| Dir["#{v}/*torch_cpu*"].any? }
+
+unless inc && lib
+  abort "LibTorch not found"
+end
 
 cuda_inc, cuda_lib = dir_config("cuda")
 cuda_inc ||= "/usr/local/cuda/include"
@@ -64,6 +72,8 @@ if with_cuda
   # TODO figure out why this is needed
   $LDFLAGS += " -Wl,--no-as-needed,#{lib}/libtorch.so"
 end
+
+abort "SoX not found" unless have_library("sox")
 
 # create makefile
 create_makefile("torchaudio/ext")

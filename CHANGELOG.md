@@ -1,3 +1,7 @@
+## 0.3.2 (unreleased)
+
+- Improved LibTorch and SoX detection for Homebrew on Mac ARM and Linux
+
 ## 0.3.1 (2023-01-29)
 
 - Added `format` option
