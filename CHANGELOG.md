@@ -1,4 +1,4 @@
-## 0.3.2 (unreleased)
+## 0.3.2 (2023-02-27)
 
 - Improved LibTorch and SoX detection for Homebrew on Mac ARM and Linux
 
