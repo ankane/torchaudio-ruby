@@ -5,7 +5,6 @@ require "torch"
 require "torchaudio/ext"
 
 # stdlib
-require "csv"
 require "digest"
 require "fileutils"
 require "rubygems/package"
