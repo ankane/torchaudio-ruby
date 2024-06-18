@@ -1,7 +1,6 @@
 module TorchAudio
   module Transforms
     class MFCC < Torch::NN::Module
-
       SUPPORTED_DCT_TYPES = [2]
 
       def initialize(sample_rate: 16000, n_mfcc: 40, dct_type: 2, norm: :ortho, log_mels: false, melkwargs: {})

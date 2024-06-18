@@ -188,17 +188,17 @@ module TorchAudio
         shape = waveform.size
         waveform = waveform.reshape(-1, shape[-1])
 
-        raise ArgumentError unless (a_coeffs.size(0) == b_coeffs.size(0))
-        raise ArgumentError unless (waveform.size.length == 2)
-        raise ArgumentError unless (waveform.device == a_coeffs.device)
-        raise ArgumentError unless (b_coeffs.device == a_coeffs.device)
+        raise ArgumentError unless a_coeffs.size(0) == b_coeffs.size(0)
+        raise ArgumentError unless waveform.size.length == 2
+        raise ArgumentError unless waveform.device == a_coeffs.device
+        raise ArgumentError unless b_coeffs.device == a_coeffs.device
 
         device = waveform.device
         dtype = waveform.dtype
         n_channel, n_sample = waveform.size
         n_order = a_coeffs.size(0)
         n_sample_padded = n_sample + n_order - 1
-        raise ArgumentError unless (n_order > 0)
+        raise ArgumentError unless n_order > 0
 
         # Pad the input and create output
         padded_waveform = Torch.zeros(n_channel, n_sample_padded, dtype: dtype, device: device)
