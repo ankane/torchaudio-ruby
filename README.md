@@ -2,7 +2,7 @@
 
 :fire: An audio library for Torch.rb
 
-[![Build Status](https://github.com/ankane/torchaudio-ruby/workflows/build/badge.svg?branch=master)](https://github.com/ankane/torchaudio-ruby/actions)
+[![Build Status](https://github.com/ankane/torchaudio-ruby/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/torchaudio-ruby/actions)
 
 ## Installation
 
