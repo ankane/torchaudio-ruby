@@ -1,3 +1,7 @@
+## 0.4.0 (unreleased)
+
+- Dropped support for Ruby < 3.1
+
 ## 0.3.2 (2023-02-27)
 
 - Improved LibTorch and SoX detection for Homebrew on Mac ARM and Linux
