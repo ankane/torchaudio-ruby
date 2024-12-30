@@ -22,7 +22,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install sox libsox-dev libsox-fmt-all
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: 3.4
           bundler-cache: true
       - uses: actions/cache@v4
         with:
