@@ -2,11 +2,18 @@ module TorchAudio
   module Transforms
     class Spectrogram < Torch::NN::Module
       def initialize(
-        n_fft: 400, win_length: nil, hop_length: nil, pad: 0,
-        window_fn: Torch.method(:hann_window), power: 2.0, normalized: false, wkwargs: nil,
-        center: true, pad_mode: "reflect", onesided: true
+        n_fft: 400,
+        win_length: nil,
+        hop_length: nil,
+        pad: 0,
+        window_fn: Torch.method(:hann_window),
+        power: 2.0,
+        normalized: false,
+        wkwargs: nil,
+        center: true,
+        pad_mode: "reflect",
+        onesided: true
       )
-
         super()
         @n_fft = n_fft
         # number of FFT bins. the returned STFT result will have n_fft // 2 + 1

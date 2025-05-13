@@ -32,10 +32,17 @@ module TorchAudio
   class << self
     # TODO remove filetype in 0.4.0
     def load(
-      filepath, out: nil, normalization: true, channels_first: true, num_frames: 0,
-      offset: 0, signalinfo: nil, encodinginfo: nil, filetype: nil, format: nil
+      filepath,
+      out: nil,
+      normalization: true,
+      channels_first: true,
+      num_frames: 0,
+      offset: 0,
+      signalinfo: nil,
+      encodinginfo: nil,
+      filetype: nil,
+      format: nil
     )
-
       filepath = filepath.to_s
 
       # check if valid file

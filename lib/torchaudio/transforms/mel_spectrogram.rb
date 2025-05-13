@@ -4,11 +4,19 @@ module TorchAudio
       attr_reader :n_mels
 
       def initialize(
-        sample_rate: 16000, n_fft: 400, win_length: nil, hop_length: nil, f_min: 0.0,
-        f_max: nil, pad: 0, n_mels: 128, window_fn: Torch.method(:hann_window),
-        power: 2.0, normalized: false, wkwargs: nil
+        sample_rate: 16000,
+        n_fft: 400,
+        win_length: nil,
+        hop_length: nil,
+        f_min: 0.0,
+        f_max: nil,
+        pad: 0,
+        n_mels: 128,
+        window_fn: Torch.method(:hann_window),
+        power: 2.0,
+        normalized: false,
+        wkwargs: nil
       )
-
         super()
         @sample_rate = sample_rate
         @n_fft = n_fft
