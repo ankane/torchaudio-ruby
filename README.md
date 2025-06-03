@@ -93,7 +93,7 @@ TorchAudio::Datasets::YESNO.new(".", download: true)
 
 Supported datasets are:
 
-- [YESNO](http://www.openslr.org/1/)
+- [YESNO](https://www.openslr.org/1/)
 
 ## Disclaimer
 
