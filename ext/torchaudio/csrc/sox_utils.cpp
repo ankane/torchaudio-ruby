@@ -44,7 +44,7 @@ void validate_input_file(const SoxFormat& sf) {
     throw std::runtime_error("Error loading audio file: unknown encoding.");
   }
   if (sf->signal.length == 0) {
-    throw std::runtime_error("Error reading audio file: unkown length.");
+    throw std::runtime_error("Error reading audio file: unknown length.");
   }
 }
 
@@ -84,7 +84,7 @@ caffe2::TypeMeta get_dtype(
         }
       default:
         // default to float32 for the other formats, including
-        // 32-bit flaoting-point WAV,
+        // 32-bit floating-point WAV,
         // MP3,
         // FLAC,
         // VORBIS etc...

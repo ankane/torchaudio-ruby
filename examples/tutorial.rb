@@ -71,7 +71,7 @@ plt.savefig("mu_law_decoding.png")
 
 err = ((waveform - reconstructed).abs / waveform.abs).median
 
-puts "Median relative difference between original and MuLaw reconstucted signals: #{(err.item * 100).round(2)}%"
+puts "Median relative difference between original and MuLaw reconstructed signals: #{(err.item * 100).round(2)}%"
 
 # ---
 
