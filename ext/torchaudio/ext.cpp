@@ -1,11 +1,12 @@
+#include <string>
+
 #include <torchaudio/csrc/sox.h>
 
 #include <rice/rice.hpp>
 #include <rice/stl.hpp>
 
 extern "C"
-void Init_ext()
-{
+void Init_ext() {
   auto rb_mTorchAudio = Rice::define_module("TorchAudio");
 
   auto rb_mExt = Rice::define_module_under(rb_mTorchAudio, "Ext")
