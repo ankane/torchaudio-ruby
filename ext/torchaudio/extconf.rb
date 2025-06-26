@@ -78,7 +78,7 @@ sox_inc ||= paths.map { |v| "#{v}/include" }.find { |v| File.exist?("#{v}/sox.h"
 sox_lib ||= paths.map { |v| "#{v}/lib" }.find { |v| Dir["#{v}/*libsox*"].any? }
 
 $INCFLAGS += " -I#{sox_inc}" if sox_inc
-$LDFLAGS += " -L#{sox_lib}" if Dir.exist?(sox_lib)
+$LDFLAGS += " -L#{sox_lib}" if sox_lib
 abort "SoX not found" unless have_library("sox")
 
 # create makefile
