@@ -73,6 +73,12 @@ if with_cuda
   $LDFLAGS += " -Wl,--no-as-needed,#{lib}/libtorch.so"
 end
 
+sox_inc, sox_lib = dir_config("sox")
+sox_inc ||= paths.map { |v| "#{v}/include" }.find { |v| File.exist?("#{v}/sox.h") }
+sox_lib ||= paths.map { |v| "#{v}/lib" }.find { |v| Dir["#{v}/*libsox*"].any? }
+
+$INCFLAGS += " -I#{sox_inc}" if sox_inc
+$LDFLAGS += " -L#{sox_lib}" if Dir.exist?(sox_lib)
 abort "SoX not found" unless have_library("sox")
 
 # create makefile

@@ -1,3 +1,7 @@
+## 0.4.1 (unreleased)
+
+- Improved SoX detection for Homebrew
+
 ## 0.4.0 (2024-08-02)
 
 - Dropped support for Ruby < 3.1
