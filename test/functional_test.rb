@@ -2,7 +2,7 @@ require_relative "test_helper"
 
 class FunctionalTest < Minitest::Test
   def test_compute_deltas
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Functional.compute_deltas(waveform)
     assert_equal [1, 50800], transformed.shape
     expected = [3.0517579e-06, 0.0, -3.0517579e-06, -6.1035157e-06, 0.0]
@@ -10,7 +10,7 @@ class FunctionalTest < Minitest::Test
   end
 
   def test_gain
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Functional.gain(waveform)
     assert_equal [1, 50800], transformed.shape
     expected = [3.4241286e-05, 6.848257e-05, 3.4241286e-05, 3.4241286e-05, 3.4241286e-05]
@@ -18,7 +18,7 @@ class FunctionalTest < Minitest::Test
   end
 
   def test_dither
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Functional.dither(waveform)
     assert_equal [1, 50800], transformed.shape
     expected = [3.0517578e-05, 6.1035156e-05, 3.0517578e-05, 3.0517578e-05, 3.0517578e-05]

@@ -2,7 +2,7 @@ require_relative "test_helper"
 
 class TransformsTest < Minitest::Test
   def test_spectogram
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Transforms::Spectrogram.new.call(waveform)
     assert_equal [1, 201, 255], transformed.size
     expected = [0.00051381276, 6.306071e-05, 0.0009923399, 0.00330968, 0.00030008898]
@@ -35,7 +35,7 @@ class TransformsTest < Minitest::Test
   end
 
   def test_mu_law_encoding
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Transforms::MuLawEncoding.new.call(waveform)
     assert_equal [1, 50800], transformed.size
     expected = [128, 128, 128, 128, 128]
@@ -51,7 +51,7 @@ class TransformsTest < Minitest::Test
   end
 
   def test_compute_deltas
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Transforms::ComputeDeltas.new.call(waveform)
     assert_equal [1, 50800], transformed.shape
     expected = [3.0517579e-06, 0.0, -3.0517579e-06, -6.1035157e-06, 0.0]
@@ -59,7 +59,7 @@ class TransformsTest < Minitest::Test
   end
 
   def test_fade
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Transforms::Fade.new.call(waveform)
     assert_equal [1, 50800], transformed.shape
     expected = [3.0517578e-05, 6.1035156e-05, 3.0517578e-05, 3.0517578e-05, 3.0517578e-05]
@@ -67,7 +67,7 @@ class TransformsTest < Minitest::Test
   end
 
   def test_vol
-    waveform, sample_rate = TorchAudio.load(audio_path)
+    waveform, _ = TorchAudio.load(audio_path)
     transformed = TorchAudio::Transforms::Vol.new(2).call(waveform)
     assert_equal [1, 50800], transformed.shape
     expected = [6.1035156e-05, 0.00012207031, 6.1035156e-05, 6.1035156e-05, 6.1035156e-05]
