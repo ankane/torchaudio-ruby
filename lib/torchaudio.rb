@@ -30,7 +30,7 @@ module TorchAudio
   class Error < StandardError; end
 
   class << self
-    # TODO remove filetype in 0.4.0
+    # TODO remove filetype in 0.5.0
     def load(
       filepath,
       out: nil,
