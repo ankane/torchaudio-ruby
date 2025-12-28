@@ -14,8 +14,8 @@ Rake::ExtensionTask.new("torchaudio") do |ext|
 end
 
 task :remove_ext do
-  Dir["lib/torchaudio/ext.bundle"].each do |path|
-    File.unlink(path) if File.exist?(path)
+  Dir["lib/torchaudio/ext.{bundle,so}"].each do |path|
+    File.unlink(path)
   end
 end
 
