@@ -1,3 +1,7 @@
+## 0.4.2 (unreleased)
+
+- Added support for CUDA 12.9+
+
 ## 0.4.1 (2025-06-26)
 
 - Improved SoX detection for Homebrew
