@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.files         = Dir["*.{md,txt}", "{ext,lib}/**/*"]
   spec.require_path  = "lib"
 
-  spec.required_ruby_version = ">= 3.1"
+  spec.required_ruby_version = ">= 3.2"
 
   spec.add_dependency "torch-rb", ">= 0.13"
 end

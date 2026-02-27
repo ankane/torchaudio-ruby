@@ -3,6 +3,7 @@
 - Added support for CUDA 12.9+
 - Switched to TorchCodec for `load` and `save` methods
 - Removed `load_wav` method
+- Dropped support for Ruby < 3.2
 
 ## 0.4.1 (2025-06-26)
 
