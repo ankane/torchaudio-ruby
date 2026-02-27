@@ -5,4 +5,4 @@ gemspec
 gem "rake"
 gem "rake-compiler"
 gem "minitest"
-gem "torchcodec", github: "ankane/torchcodec-ruby"
+gem "torchcodec", ">= 0.1.1"

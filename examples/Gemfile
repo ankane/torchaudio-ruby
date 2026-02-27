@@ -4,4 +4,4 @@ gemspec path: ".."
 
 gem "fiddle"
 gem "matplotlib"
-gem "torchcodec", github: "ankane/torchcodec-ruby"
+gem "torchcodec", ">= 0.1.1"
