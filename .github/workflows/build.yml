@@ -8,7 +8,7 @@ jobs:
       BUNDLE_BUILD__TORCHCODEC: "--with-torch-dir=/home/runner/libtorch"
       LIBTORCH_VERSION: 2.10.0
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/cache@v5
         with:
           path: ~/libtorch
