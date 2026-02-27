@@ -5,4 +5,4 @@ gemspec
 gem "rake"
 gem "rake-compiler"
 gem "minitest"
-gem "ruby_memcheck"
+gem "torchcodec", github: "ankane/torchcodec-ruby"

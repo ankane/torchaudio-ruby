@@ -1,9 +1,6 @@
 # dependencies
 require "torch"
 
-# ext
-require "torchaudio/ext"
-
 # stdlib
 require "digest"
 require "fileutils"
@@ -30,129 +27,139 @@ module TorchAudio
   class Error < StandardError; end
 
   class << self
-    # TODO remove filetype in 0.5.0
     def load(
-      filepath,
-      out: nil,
-      normalization: true,
-      channels_first: true,
-      num_frames: 0,
-      offset: 0,
-      signalinfo: nil,
-      encodinginfo: nil,
-      filetype: nil,
-      format: nil
+      uri,
+      frame_offset: 0,
+      num_frames: -1,
+      channels_first: true
     )
-      filepath = filepath.to_s
-
-      # check if valid file
-      unless File.exist?(filepath)
-        raise ArgumentError, "#{filepath} not found or is a directory"
+      begin
+        require "torchcodec"
+      rescue LoadError
+        raise LoadError, "TorchCodec is required for load. Please install torchcodec to use this function."
       end
 
-      # initialize output tensor
-      if !out.nil?
-        check_input(out)
+      begin
+        decoder = TorchCodec::Decoders::AudioDecoder.new(uri)
+      rescue => e
+        raise RuntimeError, "Failed to create AudioDecoder for #{uri}: #{e}"
+      end
+
+      # Get sample rate from metadata
+      sample_rate = decoder.metadata[:sample_rate]
+      if sample_rate.nil?
+        raise RuntimeError, "Unable to determine sample rate from audio metadata"
+      end
+
+      # Decode the entire file first, then subsample manually
+      # This is the simplest approach since torchcodec uses time-based indexing
+      begin
+        audio_samples = decoder.get_all_samples
+      rescue => e
+        raise RuntimeError, "Failed to decode audio samples: #{e}"
+      end
+
+      data = audio_samples[:data]
+
+      # Apply frame_offset and num_frames (which are actually sample offsets)
+      if frame_offset > 0
+        if frame_offset >= data.shape[1]
+          # Return empty tensor if offset is beyond available data
+          empty_shape = channels_first ? [data.shape[0], 0] : [0, data.shape[0]]
+          return [Torch.zeros(empty_shape, dtype: Torch.float32), sample_rate]
+        end
+        data = data[0.., frame_offset..]
+      end
+
+      if num_frames == 0
+        # Return empty tensor if num_frames is 0
+        empty_shape = channels_first ? [data.shape[0], 0] : [0, data.shape[0]]
+        return [Torch.zeros(empty_shape, dtype: Torch.float32), sample_rate]
+      elsif num_frames > 0
+        data = data[0.., 0...num_frames]
+      end
+
+      # TorchCodec returns data in [channel, time] format by default
+      # Handle channels_first parameter
+      if !channels_first
+        data = data.transpose(0, 1)  # [channel, time] -> [time, channel]
+      end
+
+      [data, sample_rate]
+    end
+
+    def load_wav(path, channels_first: true)
+      load(path, channels_first: channels_first)
+    end
+
+    def save(
+      uri,
+      src,
+      sample_rate,
+      channels_first: true,
+      compression: nil
+    )
+      begin
+        require "torchcodec"
+      rescue LoadError
+        raise LoadError, "TorchCodec is required for save. Please install torchcodec to use this function."
+      end
+
+      # Input validation
+      if !src.is_a?(Torch::Tensor)
+        raise ArgumentError, "Expected src to be a torch.Tensor, got #{src.class.name}"
+      end
+
+      if src.dtype != Torch.float32
+        src = src.float
+      end
+
+      if sample_rate <= 0
+        raise ArgumentError, "sample_rate must be positive, got #{sample_rate}"
+      end
+
+      # Handle tensor shape and channels_first
+      if src.ndim == 1
+        # Convert to 2D: [1, time] for channels_first: true
+        if channels_first
+          data = src.unsqueeze(0)  # [1, time]
+        else
+          # For channels_first: false, input is [time] -> reshape to [time, 1] -> transpose to [1, time]
+          data = src.unsqueeze(1).transpose(0, 1)  # [time, 1] -> [1, time]
+        end
+      elsif src.ndim == 2
+        if channels_first
+          data = src  # Already [channel, time]
+        else
+          data = src.transpose(0, 1)  # [time, channel] -> [channel, time]
+        end
       else
-        out = Torch::FloatTensor.new
+        raise ArgumentError, "Expected 1D or 2D tensor, got #{src.ndim}D tensor"
       end
 
-      if num_frames < -1
-        raise ArgumentError, "Expected value for num_samples -1 (entire file) or >=0"
+      # Create AudioEncoder
+      begin
+        encoder = TorchCodec::Encoders::AudioEncoder.new(data, sample_rate: sample_rate)
+      rescue => e
+        raise RuntimeError, "Failed to create AudioEncoder: #{e}"
       end
-      if offset < 0
-        raise ArgumentError, "Expected positive offset value"
-      end
 
-      # same logic as C++
-      # could also make read_audio_file work with nil
-      format ||= filetype || File.extname(filepath)[1..-1]
-
-      sample_rate =
-        Ext.read_audio_file(
-          filepath,
-          out,
-          channels_first,
-          num_frames,
-          offset,
-          signalinfo,
-          encodinginfo,
-          format
-        )
-
-      # normalize if needed
-      normalize_audio(out, normalization)
-
-      [out, sample_rate]
-    end
-
-    def load_wav(filepath, **kwargs)
-      kwargs[:normalization] = 1 << 16
-      load(filepath, **kwargs)
-    end
-
-    def save(filepath, src, sample_rate, precision: 16, channels_first: true)
-      si = Ext::SignalInfo.new
-      ch_idx = channels_first ? 0 : 1
-      si.rate = sample_rate
-      si.channels = src.dim == 1 ? 1 : src.size(ch_idx)
-      si.length = src.numel
-      si.precision = precision
-      save_encinfo(filepath, src, channels_first: channels_first, signalinfo: si)
-    end
-
-    def save_encinfo(filepath, src, channels_first: true, signalinfo: nil, encodinginfo: nil, filetype: nil)
-      ch_idx, _len_idx = channels_first ? [0, 1] : [1, 0]
-
-      # check if save directory exists
-      abs_dirpath = File.dirname(File.expand_path(filepath))
-      unless Dir.exist?(abs_dirpath)
-        raise "Directory does not exist: #{abs_dirpath}"
-      end
-      # check that src is a CPU tensor
-      check_input(src)
-      # Check/Fix shape of source data
-      if src.dim == 1
-        # 1d tensors as assumed to be mono signals
-        src.unsqueeze!(ch_idx)
-      elsif src.dim > 2 || src.size(ch_idx) > 16
-        # assumes num_channels < 16
-        raise ArgumentError, "Expected format where C < 16, but found #{src.size}"
-      end
-      # sox stores the sample rate as a float, though practically sample rates are almost always integers
-      # convert integers to floats
-      if signalinfo
-        if signalinfo.rate && !signalinfo.rate.is_a?(Float)
-          if signalinfo.rate.to_f == signalinfo.rate
-            signalinfo.rate = signalinfo.rate.to_f
-          else
-            raise ArgumentError, "Sample rate should be a float or int"
-          end
-        end
-        # check if the bit precision (i.e. bits per sample) is an integer
-        if signalinfo.precision && ! signalinfo.precision.is_a?(Integer)
-          if signalinfo.precision.to_i == signalinfo.precision
-            signalinfo.precision = signalinfo.precision.to_i
-          else
-            raise ArgumentError, "Bit precision should be an integer"
-          end
+      # Determine bit_rate from compression parameter
+      bit_rate = nil
+      if !compression.nil?
+        if compression.is_a?(Integer) || compression.is_a?(Float)
+          bit_rate = compression.to_i
+        else
+          warn "Unsupported compression type #{compression.class.name}."
         end
       end
-      # programs such as librosa normalize the signal, unnormalize if detected
-      if src.min >= -1.0 && src.max <= 1.0
-        src = src * (1 << 31)
-        src = src.long
+
+      # Save to file
+      begin
+        encoder.to_file(uri, bit_rate: bit_rate)
+      rescue => e
+        raise RuntimeError, "Failed to save audio to #{uri}: #{e}"
       end
-      # set filetype and allow for files with no extensions
-      extension = File.extname(filepath)
-      filetype = extension.length > 0 ? extension[1..-1] : filetype
-      # transpose from C x L -> L x C
-      if channels_first
-        src = src.transpose(1, 0)
-      end
-      # save data to file
-      src = src.contiguous
-      Ext.write_audio_file(filepath, src, signalinfo, encodinginfo, filetype)
     end
 
     private

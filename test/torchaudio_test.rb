@@ -10,17 +10,10 @@ class TorchAudioTest < Minitest::Test
   end
 
   def test_load_missing
-    error = assert_raises(ArgumentError) do
+    error = assert_raises(RuntimeError) do
       TorchAudio.load("missing.wav")
     end
-    assert_equal "missing.wav not found or is a directory", error.message
-  end
-
-  def test_load_wav
-    out, sample_rate = TorchAudio.load_wav(audio_path)
-    assert_equal [1, 50800], out.shape
-    assert_equal [1, 2, 1, 1, 1], out[0][0..4].to_a
-    assert_equal 8000, sample_rate
+    assert_match "Could not open input file: missing.wav", error.message
   end
 
   def test_save_sample_rate

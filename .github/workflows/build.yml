@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUNDLE_BUILD__TORCH___RB: "--with-torch-dir=/home/runner/libtorch"
+      BUNDLE_BUILD__TORCHCODEC: "--with-torch-dir=/home/runner/libtorch"
       LIBTORCH_VERSION: 2.10.0
     steps:
       - uses: actions/checkout@v5
@@ -19,7 +20,7 @@ jobs:
           cd ~
           wget -q -O libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-$LIBTORCH_VERSION%2Bcpu.zip
           unzip -q libtorch.zip
-      - run: sudo apt-get update && sudo apt-get install sox libsox-dev libsox-fmt-all
+      - run: sudo apt-get update && sudo apt-get install libavcodec-dev libavdevice-dev libavfilter-dev libavutil-dev
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "4.0"
@@ -29,9 +30,4 @@ jobs:
           path: ~/data
           key: data
       - run: mkdir -p ~/data
-      - run: bundle exec rake compile -- --with-torch-dir=$HOME/libtorch
       - run: bundle exec rake test
-
-      - run: |
-          sudo apt-get update && sudo apt-get install valgrind
-          bundle exec rake test:valgrind

@@ -1,6 +1,8 @@
-## 0.4.2 (unreleased)
+## 0.5.0 (unreleased)
 
 - Added support for CUDA 12.9+
+- Switched to TorchCodec for `load` and `save` methods
+- Removed `load_wav` method
 
 ## 0.4.1 (2025-06-26)
 

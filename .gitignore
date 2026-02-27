@@ -7,6 +7,4 @@
 /spec/reports/
 /tmp/
 *.lock
-*.bundle
-*.so
 .data
