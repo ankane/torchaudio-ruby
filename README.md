@@ -6,12 +6,6 @@
 
 ## Installation
 
-First, [install SoX](#sox-installation). For Homebrew, use:
-
-```sh
-brew install sox
-```
-
 Add this line to your application’s Gemfile:
 
 ```ruby
@@ -24,13 +18,13 @@ This library follows the [Python API](https://pytorch.org/audio/). Many methods 
 
 ## Basics
 
-Load a file
+Load a file (requires [torchcodec](https://github.com/ankane/torchcodec-ruby))
 
 ```ruby
 waveform, sample_rate = TorchAudio.load("file.wav")
 ```
 
-Save a file
+Save a file (requires [torchcodec](https://github.com/ankane/torchcodec-ruby))
 
 ```ruby
 TorchAudio.save("new.wave", waveform, sample_rate)
@@ -93,37 +87,6 @@ Supported datasets are:
 This library downloads and prepares public datasets. We don’t host any datasets. Be sure to adhere to the license for each dataset.
 
 If you’re a dataset owner and wish to update any details or remove it from this project, let us know.
-
-## SoX Installation
-
-### Mac
-
-```sh
-brew install sox
-```
-
-### Windows
-
-todo
-
-### Ubuntu
-
-```sh
-sudo apt install sox libsox-dev libsox-fmt-all
-```
-
-### Travis CI
-
-Add to `.travis.yml`:
-
-```yml
-addons:
-  apt:
-    packages:
-      - sox
-      - libsox-dev
-      - libsox-fmt-all
-```
 
 ## History
 

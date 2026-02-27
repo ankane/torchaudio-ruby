@@ -1,4 +1,4 @@
-## 0.5.0 (unreleased)
+## 0.5.0 (2026-02-27)
 
 - Added support for CUDA 12.9+
 - Switched to TorchCodec for `load` and `save` methods
