@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gemspec path: ".."
+
+gem "fiddle"
+gem "matplotlib"
+gem "torchcodec", github: "ankane/torchcodec-ruby"

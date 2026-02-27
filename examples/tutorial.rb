@@ -3,7 +3,7 @@
 # see LICENSE-tutorial.txt
 
 # audio file available at
-# https://github.com/pytorch/tutorials/raw/master/_static/img/steam-train-whistle-daniel_simon-converted-from-mp3.wav
+# https://pytorch-tutorial-assets.s3.amazonaws.com/steam-train-whistle-daniel_simon.wav
 
 require "torch"
 require "torchaudio"
@@ -11,7 +11,7 @@ require "matplotlib/pyplot"
 
 plt = Matplotlib::Pyplot
 
-filename = "steam-train-whistle-daniel_simon-converted-from-mp3.wav"
+filename = "steam-train-whistle-daniel_simon.wav"
 waveform, sample_rate = TorchAudio.load(filename)
 
 puts "Shape of waveform: #{waveform.size}"
