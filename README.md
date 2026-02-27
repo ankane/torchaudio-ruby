@@ -22,13 +22,6 @@ gem "torchaudio"
 
 This library follows the [Python API](https://pytorch.org/audio/). Many methods and options are missing at the moment. PRs welcome!
 
-## Tutorial
-
-- [PyTorch tutorial](https://pytorch.org/tutorials/beginner/audio_preprocessing_tutorial.html)
-- [Ruby code](examples/tutorial.rb)
-
-Download the [audio file](https://github.com/pytorch/tutorials/raw/master/_static/img/steam-train-whistle-daniel_simon-converted-from-mp3.wav) and install the [matplotlib](https://github.com/mrkn/matplotlib.rb) gem first.
-
 ## Basics
 
 Load a file
