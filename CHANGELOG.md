@@ -1,3 +1,7 @@
+## 0.6.0 (unreleased)
+
+- Dropped support for Ruby < 3.3
+
 ## 0.5.0 (2026-02-27)
 
 - Added support for CUDA 12.9+
