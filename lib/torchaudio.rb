@@ -3,7 +3,7 @@ require "torch"
 
 # stdlib
 require "digest"
-require "fileutils"
+require "open-uri"
 require "rubygems/package"
 require "set"
 
