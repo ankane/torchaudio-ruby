@@ -16,7 +16,7 @@ gem "torchaudio"
 
 This library follows the [Python API](https://pytorch.org/audio/). Many methods and options are missing at the moment. PRs welcome!
 
-## Basics
+## Files
 
 Load a file (requires [torchcodec](https://github.com/ankane/torchcodec-ruby))
 
