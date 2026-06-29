@@ -1,10 +1,10 @@
 module TorchAudio
   module Datasets
     class YESNO < Torch::Utils::Data::Dataset
-      URL = "http://www.openslr.org/resources/1/waves_yesno.tar.gz"
+      URL = "https://www.openslr.org/resources/1/waves_yesno.tar.gz"
       FOLDER_IN_ARCHIVE = "waves_yesno"
       CHECKSUMS = {
-        "http://www.openslr.org/resources/1/waves_yesno.tar.gz" => "962ff6e904d2df1126132ecec6978786"
+        "https://www.openslr.org/resources/1/waves_yesno.tar.gz" => "962ff6e904d2df1126132ecec6978786"
       }
 
       def initialize(root, url: URL, folder_in_archive: FOLDER_IN_ARCHIVE, download: false)
